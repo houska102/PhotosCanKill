@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <script src="Entities.js"></script>
+    <script src="items.js"></script>
+    <script src="Game.js"></script>
+    <script src="script.js"></script>
+    <style>
+      .item{
+        display:inline-block;
+        width:48px;
+        height:48px;
+        margin:2px;
+      }
+      .white{
+        background-color: "white"
+      }
+      #inventory{
+        height:100%;
+        background:grey;
+        border-left:1px lightgrey solid;
+        display: flex;
+        overflow-y: auto;
+        flex-grow: 1;
+      }
+      .itembar{
+        border-top:lightgrey 3px solid;
+        width:200px;
+        height:148px;
+        background:grey;
+      }
+      #equip{
+        position:relative;
+        width:200px;
+        height:350px;
+        background-color:grey;
+        flex-grow: 2;
+      }
+      #e-helmet{
+        position:absolute;
+        left:75px;
+        top:30px;
+      }
+      #e-chest{
+        position:absolute;
+        left:75px;
+        top:90px;
+      }
+      #e-gloves{
+        position:absolute;
+        left:10px;
+        top:105px;
+      }
+      #e-weapon{
+        position:absolute;
+        right:10px;
+        top:105px;
+      }
+      #e-pants{
+        position:absolute;
+        left:75px;
+        top:150px;
+      }
+      #e-boots{
+        position:absolute;
+        left:75px;
+        top:210px;
+      }
+      #e-stats{
+        position:absolute;
+        left:5px;
+        bottom:0px;
+      }
+      .modal{
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content:space-around;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.3);
+      }
+      .modal-window {
+        width:75vw;
+        height: 75vh;
+        margin: 0 auto;
+        display:inline-flex;
+        flex-flow: row;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="1000" height="800" style="border:1px solid black;float:left;border-right:3px solid lightgrey;"></canvas>
+    <div id="sidebar" class="modal">
+      <div class="modal-window">
+        <div style="display:flex;flex-flow: column; flex-wrap: nowrap;">
+          <div id="equip">
+            <div id="e-helmet"></div>
+            <div id="e-chest"></div>
+            <div id="e-gloves"></div>
+            <div id="e-weapon"></div>
+            <div id="e-pants"></div>
+            <div id="e-boots"></div>
+            <div id="e-stats">
+              total armor: <span id="stat-armor"></span><br />
+              damage: <span id="stat-damage"></span>
+            </div>
+          </div>
+          <div class="itembar">
+            <span style="color:yellow">equiped:</span>
+            <div id="equiped"></div>
+          </div>
+          <div class="itembar">
+            <span style="color:lightgrey">comparing:</span>
+            <div  id="compare"></div>
+          </div>
+        </div>
+        <div id="inventory"></div>
+      </div>
+    </div>
+  </body>
+</html>
