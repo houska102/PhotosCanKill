@@ -47,7 +47,8 @@ class Game{
     this.items = []
     this.enemies = [];
     this.step = 0;
-    this.diff = 0;    
+    this.diff = 0;
+    this.waveCount  = 1;  
     this.gameOverFlag = false
     document.getElementById("sidebar").style.display = "none";
     document.getElementById("inventory").style.display = "none";
@@ -59,6 +60,13 @@ class Game{
 
   clear () {
     this.ctx.clearRect(0, 0, this.cwidth, this.cheight)
+  }
+  displayLevelInfo () {
+    this.ctx.fillStyle = "red"
+    this.ctx.font = "30px Arial";
+    this.ctx.fillText("Level: " + this.waveCount, 50, 50)
+    this.ctx.font = "20px Arial";
+    this.ctx.fillText("Enemies left: " + this.enemies.length,50,75)
   }
   drawFrame () {
     this.clear();
@@ -87,9 +95,7 @@ class Game{
       this.ctx.textAlign = "center";
       this.ctx.fillText("-" + this.damageNumbers[i].value, centerX + xOffset, centerY + yOffset)
     }
-    this.ctx.fillStyle = "red"
-    this.ctx.font = "20px Arial";
-    this.ctx.fillText("Enemies left: " + this.enemies.length,50,50)
+    this.displayLevelInfo()
   }
 
   spawnEnemies () {
@@ -146,6 +152,7 @@ class Game{
     this.player.x = this.width / 2;
     this.player.y = this.height / 2;
     this.player.health = this.player.health > 75 ? 100 : this.player.health + 25
+    this.waveCount++
     while(this.spawnEnemies()){}
   }
 
@@ -394,8 +401,6 @@ class Game{
     this.ctx.textAlign="center";
     this.ctx.lineWidth=3;
     this.ctx.strokeStyle="white"
-    this.ctx.fillText("PAUSED", this.cwidth/2, this.cheight/2)
-    this.ctx.strokeText("PAUSED", this.cwidth/2, this.cheight/2)
     this.diplayInterface()
   }
   unPause(){
@@ -408,6 +413,11 @@ class Game{
     },20)
   }
 
+  generateWeaponAdjective () {
+    const arr = ['Sharp', 'Pointy', 'balanced', 'godly', 'chipped', 'dull'];
+    return arr[getRandomInt(0, arr.length)];
+  }
+
   spawnItem(x, y){
     let item = getRandomInt(1, 6)
     let rarity = getRandomInt(1, 100)
@@ -415,13 +425,13 @@ class Game{
     let outline = "black"
     let amp = 1;
     let name, dmg, rng, mK, armor, type;
-    if(rarity>98){
+    if(rarity>99){
       color = "orange"
-      amp = 2;
-    } else if(rarity>80){
+      amp = 2.25
+    } else if (rarity>90){
       color = "cyan"
-      amp = 1.5;
-    } else if(rarity>70){
+      amp = 1.7
+    } else if (rarity>70){
       color = "blue"
       amp = 1.4
     } else if (rarity>50) {
@@ -430,10 +440,10 @@ class Game{
     }
     switch (item) {
       case 1:
-        name = "sword"
+        name = `${this.generateWeaponAdjective() } sword`
         dmg = getRandomInt(1 + this.diff / 3, 5 + this.diff / 3) * amp
-        rng = getRandomInt(20 + this.diff, 40 + this.diff) * amp
-        mK = getRandomInt(1 + this.diff / 3, 5 + this.diff / 3) * amp
+        rng = getRandomInt(20 + this.diff, 30 + this.diff) * amp
+        mK = getRandomInt(2 + this.diff / 3, 5 + this.diff / 3) * amp
         this.items.push(new Weapon(name, x, y, color, outline, this.ctx, dmg, rng, mK))
         break;
       case 2:
@@ -473,7 +483,7 @@ class Game{
       let centerX = this.cwidth / 2
       let centerY = this.cheight / 2
       this.ctx.beginPath();
-      this.ctx.arc(centerX, centerY, this.player.rad + this.player.weapon.range / 2, angl-Math.PI / 3, angl + Math.PI / 3)
+      this.ctx.arc(centerX, centerY, this.player.rad + this.player.weapon.range / 2, angl - (DEG2RAD * 60), angl + (DEG2RAD * 60))
       this.ctx.lineWidth = this.player.weapon.range;
       this.ctx.strokeStyle = "white";
       this.ctx.stroke();
@@ -490,7 +500,6 @@ class Game{
     }, [])
   }
   overflowTest (enemyAngle, runForMin, overflowValue){
-    console.log(`running attack overflow test for angle: ${enemyAngle} and overflow value: ${overflowValue} running as min: ${runForMin}`)
     if (runForMin) {
       return enemyAngle < 360 && enemyAngle > overflowValue;
     } else {
@@ -510,9 +519,6 @@ class Game{
       testFlags.push(this.overflowTest(enemyAngle, true, overflowMin))
 
     }
-    console.log("tested enemy degrees orientation to player", enemyAngle/DEG2RAD,"pointer degrees", mouseClickAngle/DEG2RAD)
-    console.log("test results: ", testFlags)
-    console.log("overAll result: " + testFlags.reduce((acc, item) => acc || item, false))
     return testFlags.reduce((acc, item) => acc || item, false)
     
   }

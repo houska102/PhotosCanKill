@@ -5,15 +5,11 @@ class Entity{
     this.color = color;
     this.rad = rad
     this.ctx = ctx
-    /*this.i = setInterval(()=>{
-      this.x++;
-      this.draw(this.ctx);
-    },20)*/
   }
 
   draw(dx,dy){
     this.ctx.beginPath();
-    this.ctx.arc(dx,dy,this.rad,0, Math.PI*2);
+    this.ctx.arc(dx,dy,this.rad,0, (360 * DEG2RAD));
     this.ctx.fillStyle = this.color;
     this.ctx.fill();
   }
@@ -91,7 +87,7 @@ class Player extends Entity{
     return this.gloves.armor+this.chest.armor+this.pants.armor+this.boots.armor+this.helmet.armor
   }
 
-  move(width,height){
+ move (width, height) {
     for (let i = 0; i < keysPressed.length; i++) {
       switch(keysPressed[i]){
         case 38:

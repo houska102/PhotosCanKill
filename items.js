@@ -23,9 +23,9 @@ class item{
 class Weapon extends item{
   constructor(name, x, y, color, outline, ctx, dmg, range, maxKill){
     super(name, x, y, color, outline, ctx)
-    this.dmg = dmg;
+    this.dmg = Math.floor(dmg);
     this.range = range;
-    this.maxKill = maxKill
+    this.maxKill = Math.round(maxKill*100)/100
   }
   show () {
     let element = document.createElement("span");
@@ -49,7 +49,7 @@ class Weapon extends item{
 class Armor extends item{
   constructor(name,x,y,color,outline,ctx,armor,type){
     super(name,x,y,color,outline,ctx)
-    this.armor = armor
+    this.armor = Math.floor(armor)
     this.type = type;
   }
   show () {
